@@ -40,3 +40,5 @@ for currency in table:
     test.append([Type, Name, Rate])
     
 pprint (data)
+
+#mtn que luludangy a trouvé les data, il faut faire quoi concretement, juste le forecast puis comparer le forecast au live quote? 
