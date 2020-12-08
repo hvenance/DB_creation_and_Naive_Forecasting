@@ -55,6 +55,13 @@ dico_today={}
 dico_today['today']=dico
 pprint(dico_today)
 
+#si on met en dico on peut faire comme ça pour avoir en tableau:
+!pip install pandas
+import pandas as pd
+
+df=pd.DataFrame(dico_today)
+pprint(df)
+
 #mtn que luludangy a trouvé les data, il faut faire quoi concretement, juste le forecast puis comparer le forecast au live quote? 
 
 !pip install pandas
