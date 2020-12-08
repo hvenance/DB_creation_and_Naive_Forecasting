@@ -32,11 +32,11 @@ from pprint import pprint
 
 table = ecb.find('div', class_="forextable").find('tbody').find_all('tr')
 
-test = []
+data = []
 for currency in table:
     Type = currency.find('td', class_="currency").text
     Name = currency.find('td', class_="alignLeft").text
     Rate = currency.find('span', class_="rate").text
     test.append([Type, Name, Rate])
     
-pprint (test)
+pprint (data)
