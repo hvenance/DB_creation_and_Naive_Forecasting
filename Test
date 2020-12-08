@@ -50,8 +50,10 @@ for currency in table:
     Name = currency.find('td', class_="alignLeft").text
     Rate = currency.find('span', class_="rate").text
     dico[currency.find('td', class_="currency").text]=currency.find('span', class_="rate").text
-    
-pprint(dico)
+
+dico_today={}
+dico_today['today']=dico
+pprint(dico_today)
 
 #mtn que luludangy a trouvé les data, il faut faire quoi concretement, juste le forecast puis comparer le forecast au live quote? 
 
