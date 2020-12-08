@@ -19,4 +19,24 @@ pprint(currencies)
 
 rates et currencies sont dans deux class diff donc il faut trouver un moyen de les rejoindre 
 
+#LucienWebScraping
 
+from bs4 import BeautifulSoup
+import requests
+
+ecb_page = requests.get("https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html")
+
+ecb = BeautifulSoup(ecb_page.content, "html.parser")
+
+from pprint import pprint
+
+table = ecb.find('div', class_="forextable").find('tbody').find_all('tr')
+
+test = []
+for currency in table:
+    Type = currency.find('td', class_="currency").text
+    Name = currency.find('td', class_="alignLeft").text
+    Rate = currency.find('span', class_="rate").text
+    test.append([Type, Name, Rate])
+    
+pprint (test)
