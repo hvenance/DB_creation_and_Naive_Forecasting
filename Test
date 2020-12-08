@@ -42,3 +42,27 @@ for currency in table:
 pprint (data)
 
 #mtn que luludangy a trouvé les data, il faut faire quoi concretement, juste le forecast puis comparer le forecast au live quote? 
+
+!pip install pandas
+import pandas as pd
+import sqlite3
+
+from datetime import datetime
+
+!pip install requests
+import requests
+
+import json
+
+start="2000-01-01"
+end="2020-12-05"
+
+start_obj = datetime.strptime(start,'%Y-%m-%d')
+end_obj = datetime.strptime(end,'%Y-%m-%d')
+
+start_str = datetime.strftime(start_obj,'%Y-%m-%d %H:%M:%S')
+end_str = datetime.strftime(end_obj,'%Y-%m-%d %H:%M:%S')
+
+result=requests.get('https://api.frankfurter.app/'+start+'..'+end+'?to=USD,GBP,BRL,SEK,THB')
+result.status_code
+result.text
