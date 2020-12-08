@@ -66,3 +66,23 @@ end_str = datetime.strftime(end_obj,'%Y-%m-%d %H:%M:%S')
 result=requests.get('https://api.frankfurter.app/'+start+'..'+end+'?to=USD,GBP,BRL,SEK,THB')
 result.status_code
 result.text
+
+
+#Once again, it's time to shine for lulu
+
+from bs4 import BeautifulSoup
+import requests
+from pprint import pprint
+import datetime
+
+start_date = datetime.date(2020, 1, 1)
+
+start = start_date.strftime("%Y-%m-%d")
+
+end_date = datetime.date.today()
+
+end = end_date.strftime("%Y-%m-%d")
+
+historical_page = requests.get("https://www.frankfurter.app/" + start + '..' + end + '?to=USD,GBP,BRL,SEK,THB').json()
+
+pprint(historical_page)
