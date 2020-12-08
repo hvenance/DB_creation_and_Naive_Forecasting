@@ -41,6 +41,18 @@ for currency in table:
     
 pprint (data)
 
+#REGARDE ICI 
+
+dico = {}
+
+for currency in table:
+    Type = currency.find('td', class_="currency").text
+    Name = currency.find('td', class_="alignLeft").text
+    Rate = currency.find('span', class_="rate").text
+    dico[currency.find('td', class_="currency").text]=currency.find('span', class_="rate").text
+    
+pprint(dico)
+
 #mtn que luludangy a trouvé les data, il faut faire quoi concretement, juste le forecast puis comparer le forecast au live quote? 
 
 !pip install pandas
