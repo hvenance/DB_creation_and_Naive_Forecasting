@@ -138,6 +138,11 @@ for currency in table:
     
 pprint (data)
 
+#nouchine: là pour mettre en tableau
+
+import pandas as pd 
+df = pd.DataFrame(data, columns =['Name', 'Age', 'Score']) 
+pprint(df)
 
 2. Pour retrouver les datas depuis le début de l'année
 
