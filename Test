@@ -222,3 +222,13 @@ for r in exponential_smoothing(actual_rate=df2['Rate'], alpha=0.5):
 import pandas as pd 
 #df2['Forecast'] = forecast
 #pprint(df2)
+
+forecast=[]
+
+#ici avec le naive forecast 
+
+df2['Naive'] = df2['Rate'].shift(5)
+forecast.append(df2['Naive'])
+
+#df2['naive']
+forecast
