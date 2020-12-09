@@ -271,3 +271,34 @@ error.append(df2['Error'])
 df2
 
 error
+
+#TEST ES SVP REGARDEZ SI CA VS VA ???? i don't know 
+
+import numpy as np
+
+#tous les 5 on change de monnaie
+
+def ES(actual_rate, alpha):
+    
+    size_series = len(actual_rate)
+    
+    forecast_rate = np.full(size_series, np.NaN)
+    
+    forecast_rate[5] = actual_rate[0]
+    forecast_rate[6] = actual_rate[1]
+    forecast_rate[7] = actual_rate[2]
+    forecast_rate[8] = actual_rate[3]
+    forecast_rate[9] = actual_rate[4]
+    
+    for idx in range(10, size_series):
+        
+        forecast_rate[idx] = alpha * actual_rate[idx - 5] + (1 - alpha) * forecast_rate[idx - 5]
+    return forecast_rate
+
+import pandas as pd 
+
+forecast1=[]
+
+df2['ES'] = ES(actual_rate=df2['Rate'], alpha=0.5)
+forecast1.append(df2['ES'])
+df2
