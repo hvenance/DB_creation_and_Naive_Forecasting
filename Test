@@ -150,7 +150,7 @@ d2.append(data.pop(17-3))
 d2.append(data.pop(30-4))
 
 import pandas as pd 
-df = pd.DataFrame(sorted(d2), columns =['Name', 'Age', 'Score']) 
+df = pd.DataFrame(sorted(d2), columns =['Name', 'Age', 'Rate']) 
 pprint(df)
 
 2. Pour retrouver les datas depuis le début de l'année
@@ -190,5 +190,5 @@ pprint (the_list)
 
 #nouchine: pr le mettre en tableau 
 import pandas as pd 
-df2 = pd.DataFrame(the_list, columns =['Name', 'Age', 'Score']) ms ceserait peut-être mieux un tableau où les currencies n(apparaissent qu'une fois
+df2 = pd.DataFrame(the_list, columns =['Name', 'Age', 'Rate']) ms ceserait peut-être mieux un tableau où les currencies n(apparaissent qu'une fois
 pprint(df2)
