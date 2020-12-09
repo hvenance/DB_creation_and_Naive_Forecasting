@@ -178,3 +178,8 @@ for date in list_of_dates:
 pprint (the_list)
 
 #FIN (Pour le moment)
+
+#nouchine: pr le mettre en tableau 
+import pandas as pd 
+df2 = pd.DataFrame(the_list, columns =['Name', 'Age', 'Score']) ms ceserait peut-être mieux un tableau où les currencies n(apparaissent qu'une fois
+pprint(df2)
