@@ -262,3 +262,12 @@ import pandas as pd
 
 #df2['Forecast'] = forecast
 #pprint(df2)
+
+error=[]
+
+df2['Error'] = df2['Rate'] - df2['Naive']
+error.append(df2['Error'])
+
+df2
+
+error
