@@ -14,7 +14,7 @@ start = start_date.strftime("%Y-%m-%d")
 
 heure_actuelle = datetime.datetime.now().time()
 
-heure_cible = datetime.time(16, 5) #A 16h05, on va dire que les taux sont ceux du jour (car le site de l'ECBB se met à jour vers 16h), avant ce sont les taux de la veille
+heure_cible = datetime.time(16, 5) #A 16h05, on va dire que les taux sont ceux du jour (car le site de l'ECB se met à jour vers 16h), avant ce sont les taux de la veille
 
 if heure_actuelle < heure_cible:
     end_date = datetime.date.today() - datetime.timedelta(2)
