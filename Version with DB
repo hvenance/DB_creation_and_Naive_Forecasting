@@ -95,8 +95,6 @@ SEK =[]
 THB = []
 BRL =[]
 
-name_list = [USD, GBP, SEK, THB, BRL] #utile pour la DB
-
 final_list = sorted(historical_values_list) + sorted(list_today)
 
 for t in final_list:            #On fait ça pour avoir les valeurs séparées pour chaque monnaie --> pratique pour la DB
