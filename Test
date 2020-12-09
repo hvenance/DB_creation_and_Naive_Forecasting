@@ -107,3 +107,69 @@ end = end_date.strftime("%Y-%m-%d")
 historical_page = requests.get("https://www.frankfurter.app/" + start + '..' + end + '?to=USD,GBP,BRL,SEK,THB').json()
 
 pprint(historical_page)
+
+
+
+#Version ldangy à 1h22 du matin le 9/12
+
+1. pour retrouver les datas du jour (il y a encore un problème avec ça pour définir clairement le 'jour')
+
+from bs4 import BeautifulSoup
+import requests
+import datetime
+from pprint import pprint
+
+ecb_page = requests.get("https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html")
+
+ecb = BeautifulSoup(ecb_page.content, "html.parser")
+
+table = ecb.find('div', class_="forextable").find('tbody').find_all('tr')
+
+today_date = datetime.date.today()
+today = today_date.strftime("%Y-%m-%d")
+
+data = []
+
+for currency in table:
+    Date = today
+    Type = currency.find('td', class_="currency").text
+    Rate = (float(currency.find('span', class_="rate").text)) #On convertit notre rate en un nombbre flottant (contre string avant)
+    data.append((Date, Type, Rate))
+    
+pprint (data)
+
+
+2. Pour retrouver les datas depuis le début de l'année
+
+from bs4 import BeautifulSoup
+import requests
+from pprint import pprint
+import datetime
+
+start_date = datetime.date(2020, 1, 1)
+
+start = start_date.strftime("%Y-%m-%d")
+
+end_date = datetime.date.today() - datetime.timedelta(1)
+
+end = end_date.strftime("%Y-%m-%d")
+
+historical_page = requests.get("https://www.frankfurter.app/" + start + '..' + end + '?to=USD,GBP,BRL,SEK,THB').json()
+
+Rate = historical_page['rates']
+
+#we have a dictionnary but we want a list --> make it happen
+
+list_of_dates = list(Rate.keys())
+
+the_list = []
+
+for date in list_of_dates:
+    list_of_name = list(Rate[date].keys())
+    for name in list_of_name:
+        rate_of_the_day = Rate[date][name]
+        the_list.append((date, name, rate_of_the_day))
+        
+pprint (the_list)
+
+#FIN (Pour le moment)
