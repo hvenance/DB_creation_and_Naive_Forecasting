@@ -104,17 +104,47 @@ pprint(in_a_table)
 
 #Time to forecast
 
-forecast = []
+naive_forecast = []
 
-in_a_table['Naive'] = in_a_table['Rate'].shift(5)
+in_a_table['Naive forecast'] = in_a_table['Rate'].shift(5)
 
-forecast.append(in_a_table['Naive'])
+naive_forecast.append(in_a_table['Naive forecast'])
 
-errors = []
+Naive_errors = []
 
-in_a_table['Errors'] = in_a_table['Rate'] - in_a_table['Naive']
+in_a_table['Naive: errors'] = in_a_table['Rate'] - in_a_table['Naive forecast']
 
-errors.append(in_a_table['Errors'])
+Naive_errors.append(in_a_table['Naive: errors'])
 
-pprint(in_a_table)
+def ES(actual_rate, alpha):
+    
+    size_series = len(actual_rate)
+    
+    forecast_rate = np.full(size_series, np.NaN)
+    
+    forecast_rate[5] = actual_rate[0]
+    forecast_rate[6] = actual_rate[1]
+    forecast_rate[7] = actual_rate[2]
+    forecast_rate[8] = actual_rate[3]
+    forecast_rate[9] = actual_rate[4]
+    
+    for idx in range(10, size_series):
+        
+        forecast_rate[idx] = alpha * actual_rate[idx - 5] + (1 - alpha) * forecast_rate[idx - 5]
+    return forecast_rate
+
+
+ES_forecast=[]
+
+in_a_table['ES forecast'] = ES(actual_rate=in_a_table['Rate'], alpha=0.5)
+
+ES_forecast.append(in_a_table['ES forecast'])
+
+ES_errors = []
+
+in_a_table['ES: errors'] = in_a_table['Rate'] - in_a_table['ES forecast']
+
+ES_errors.append(in_a_table['ES: errors'])
+
+in_a_table
      
