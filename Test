@@ -192,3 +192,33 @@ pprint (the_list)
 import pandas as pd 
 df2 = pd.DataFrame(the_list, columns =['Name', 'Age', 'Rate']) ms ceserait peut-être mieux un tableau où les currencies n(apparaissent qu'une fois
 pprint(df2)
+
+#dc là si tu print tu vas voir qu'il utilise juste le rate précédent pcq qu'il voit pas que c'est la même date pour des monnaies diff 
+
+import numpy as np
+
+def exponential_smoothing(actual_rate, alpha):
+    
+    size_series = len(actual_rate)
+    
+    forecast_rate = np.full(size_series + 1, np.NaN)
+    
+    forecast_rate[1] = actual_rate[0]
+    
+    for idx in range(2, size_series + 1):
+        
+        forecast_rate[idx] = alpha * actual_rate[idx - 1] + (1 - alpha) * forecast_rate[idx - 1]
+        
+    return forecast_rate
+
+exponential_smoothing(actual_rate=df2['Rate'], alpha=0.5)
+
+forecast = []
+for r in exponential_smoothing(actual_rate=df2['Rate'], alpha=0.5):
+    forecast.append(r)
+    
+#pprint(forecast)
+
+import pandas as pd 
+#df2['Forecast'] = forecast
+#pprint(df2)
