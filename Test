@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 import requests
 from pprint import pprint
 import datetime
-import pandas as pd 
+import pandas as pd
+import numpy as np
 
 #On cherche les données historiques
 start_date = datetime.date(2020, 1, 1)
