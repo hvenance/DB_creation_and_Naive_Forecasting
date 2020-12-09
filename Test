@@ -141,6 +141,18 @@ for currency in table:
     
 pprint (data)
 
+#ICI  mais ça devient long avec (hip)pop 
+d2=[]
+d2.append(data.pop(0))
+d2.append(data.pop(5-1)) #il faut faire -1 pcq on retire un "élement avant (USD)
+d2.append(data.pop(9-2))
+d2.append(data.pop(17-3))
+d2.append(data.pop(30-4))
+
+import pandas as pd 
+df = pd.DataFrame(sorted(d2), columns =['Name', 'Age', 'Score']) 
+pprint(df)
+
 2. Pour retrouver les datas depuis le début de l'année
 
 from bs4 import BeautifulSoup
