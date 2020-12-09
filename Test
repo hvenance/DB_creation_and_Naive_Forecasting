@@ -1,5 +1,120 @@
-#Vous pouvez modifier ?
-#Je parle seul ?
-#Test 2
-oui tu parles seul oui on sait écrire
-oui je confirme
+#Let's gather historical values
+
+from bs4 import BeautifulSoup
+import requests
+from pprint import pprint
+import datetime
+import pandas as pd 
+
+#On cherche les données historiques
+start_date = datetime.date(2020, 1, 1)
+
+start = start_date.strftime("%Y-%m-%d")
+
+heure_actuelle = datetime.datetime.now().time()
+
+heure_cible = datetime.time(16, 5) #A 16h05, on va dire que les taux sont ceux du jour (car le site de l'ECBB se met à jour vers 16h), avant ce sont les taux de la veille
+
+if heure_actuelle < heure_cible:
+    end_date = datetime.date.today() - datetime.timedelta(2)
+else:
+    end_date = datetime.date.today() - datetime.timedelta(1)
+
+end = end_date.strftime("%Y-%m-%d")
+
+historical_page = requests.get("https://www.frankfurter.app/" + start + '..' + end + '?to=USD,GBP,BRL,SEK,THB').json()
+
+Rate = historical_page['rates'] #On fait ça pour ne prendre que les valeurs associées à la clé 'rates' de notre dictionnaire
+
+
+#we have a dictionnary but we want a list --> make it happen
+
+list_of_dates = list(Rate.keys())
+
+historical_values_list = []
+
+for date in list_of_dates:
+    list_of_name = list(Rate[date].keys())
+    for name in list_of_name:
+        rate_of_the_day = Rate[date][name]
+        historical_values_list.append((date, name, rate_of_the_day))
+        
+       
+       
+       
+       
+       
+       
+       
+       
+#We want today's values      
+
+ecb_page = requests.get("https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html")
+
+ecb = BeautifulSoup(ecb_page.content, "html.parser")
+
+table = ecb.find('div', class_="forextable").find('tbody').find_all('tr')
+
+ajd_date = datetime.date.today()
+
+if heure_actuelle < heure_cible:
+    ajd_date = datetime.date.today() - datetime.timedelta(1)
+else:
+    ajd_date = datetime.date.today()
+
+today = ajd_date.strftime("%Y-%m-%d")
+
+data = []
+
+for currency in table:
+            Date = today
+            Rate = (float(currency.find('span', class_="rate").text)) #On convertit notre rate en un nombre flottant (contre string avant)
+            Type = currency.find('td', class_="currency").text
+            data.append((Date, Type, Rate))
+
+list_today = []
+
+for money_wanted in data:
+    if (money_wanted[1]) == 'USD':
+         list_today.append(money_wanted)
+    elif (money_wanted[1]) == 'SEK':
+        list_today.append(money_wanted)
+    elif (money_wanted[1]) == 'BRL':
+        list_today.append(money_wanted)
+    elif (money_wanted[1]) == 'GBP':
+        list_today.append(money_wanted)
+    elif (money_wanted[1]) == 'THB':
+        list_today.append(money_wanted)
+    else:
+        ()
+        
+        
+        
+        
+        
+#We create a list with historical and today's values   
+
+final_list = sorted(historical_values_list) + sorted(list_today)
+   
+in_a_table = pd.DataFrame(sorted(final_list), columns =['Date', 'Money', 'Rate'])
+
+pprint(in_a_table)
+
+
+
+#Time to forecast
+
+forecast = []
+
+in_a_table['Naive'] = in_a_table['Rate'].shift(5)
+
+forecast.append(in_a_table['Naive'])
+
+errors = []
+
+in_a_table['Errors'] = in_a_table['Rate'] - in_a_table['Naive']
+
+errors.append(in_a_table['Errors'])
+
+pprint(in_a_table)
+     
