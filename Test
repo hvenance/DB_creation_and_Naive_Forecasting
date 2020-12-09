@@ -232,3 +232,33 @@ forecast.append(df2['Naive'])
 
 #df2['naive']
 forecast
+
+import numpy as np
+
+#tous les 5 lignes on change de monnaie
+
+def ES(actual_rate, alpha):
+    
+    size_series = len(actual_rate)
+    
+    forecast_rate = np.full(size_series + 1, np.NaN)
+    
+    forecast_rate[1] = actual_rate[0]
+    
+    for idx in range(6, size_series + 1): #dc on doit commence à l'indice 6 pcq les 5 premiers seront NAN
+        
+        forecast_rate[idx] = alpha * actual_rate[idx - 5] + (1 - alpha) * forecast_rate[idx - 5]#j'ai mis -5 car on se base sur la data 5 ligne plus haut
+    return forecast_rate
+
+ES(actual_rate=df2['Rate'], alpha=0.5)
+
+forecast = []
+for r in ES(actual_rate=df2['Rate'], alpha=0.5):
+    forecast.append(r)
+    
+#pprint(forecast)
+
+import pandas as pd 
+
+#df2['Forecast'] = forecast
+#pprint(df2)
