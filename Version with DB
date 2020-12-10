@@ -140,7 +140,32 @@ gathered = [USD_after, GBP_after, SEK_after, THB_after, BRL_after] #On redefinit
 in_a_table = pd.concat(gathered).sort_values(by=['Date', 'Money']) #pareil que pour avant
 
 in_a_table
+
+def ES(d, alpha):    #exponential smoothing
+    size_series = len(d)   
+    forecast_rate = np.full(size_series, np.NaN)   
+    forecast_rate[1] = d[0]     
+    for idx in range(2, size_series):     
+        forecast_rate[idx] = alpha * d[idx - 1] + (1 - alpha) * forecast_rate[idx - 1]
+    return forecast_rate
     
+USD_after['ES'] = ES(d=USD_after['Rate'], alpha=0.5)
+GBP_after['ES'] = ES(d=GBP_after['Rate'], alpha=0.5)
+SEK_after['ES'] = ES(d=SEK_after['Rate'], alpha=0.5)
+THB_after['ES'] = ES(d=THB_after['Rate'], alpha=0.5)
+BRL_after['ES'] = ES(d=BRL_after['Rate'], alpha=0.5)
+
+USD_after['ES: error'] = USD_after['Rate']-USD_after['ES']
+GBP_after['ES: error'] = GBP_after['Rate']-GBP_after['ES']
+SEK_after['ES: error'] = SEK_after['Rate']-SEK_after['ES']
+THB_after['ES: error'] = THB_after['Rate']-THB_after['ES']
+BRL_after['ES: error'] = BRL_after['Rate']-BRL_after['ES']
+
+gathered = [USD_after, GBP_after, SEK_after, THB_after, BRL_after] #On redefinit gathered avec nos nouvelles dataframe (qui contiennent le naive forecast)
+
+in_a_table = pd.concat(gathered).sort_values(by=['Date', 'Money']) #pareil que pour avant
+
+in_a_table
 #On peut essayer de definir une fonction pour notre ES et MA (pas obligatoire mous nouchnouchine t'as l'air de maitriser l'ES)
 
 
