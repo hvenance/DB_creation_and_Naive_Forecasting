@@ -161,7 +161,7 @@ SEK_after['ES: error'] = SEK_after['Rate']-SEK_after['ES']
 THB_after['ES: error'] = THB_after['Rate']-THB_after['ES']
 BRL_after['ES: error'] = BRL_after['Rate']-BRL_after['ES']
 
-gathered = [USD_after, GBP_after, SEK_after, THB_after, BRL_after] #On redefinit gathered avec nos nouvelles dataframe (qui contiennent le naive forecast)
+gathered = [USD_after, GBP_after, SEK_after, THB_after, BRL_after] #On redefinit gathered avec nos nouvelles dataframe (qui contiennent le ES)
 
 in_a_table = pd.concat(gathered).sort_values(by=['Date', 'Money']) #pareil que pour avant
 
