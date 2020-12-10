@@ -1,4 +1,4 @@
-1. Let's gather historical values
+#1. Let's gather historical values
 
 from bs4 import BeautifulSoup
 import requests
