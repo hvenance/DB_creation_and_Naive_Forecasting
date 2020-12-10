@@ -42,7 +42,7 @@ for date in list_of_dates:
         
         
         
-2. We want today's values
+#2. We want today's values
 
 ecb_page = requests.get("https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html")
 
@@ -87,7 +87,7 @@ for money_wanted in data:
         
         
         
-3. Gather everything
+#3. Gather everything
 
 USD =[]
 GBP = []
@@ -122,7 +122,7 @@ in_a_table = pd.concat(gathered).sort_values(by=['Date', 'Money']) #On concat no
 
 
 
-4. Time to forecast
+#4. Time to forecast
 
 def naive_forecast(data_frame):  #On définit la fonction naïve forecast qu'on va pouvoir appliquer à chaque DataFrame
     data_frame['Naive forecast'] = data_frame['Rate'].shift(1)
@@ -170,7 +170,7 @@ in_a_table
 
 
 
-5. The database part
+#5. The database part
 
 import sqlite3
 
