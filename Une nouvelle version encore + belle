@@ -1,0 +1,171 @@
+import sqlite3
+
+connection = sqlite3.connect('rates_gathering.db') #On nomme la DB et on crée une connexion à celle-ci
+
+1. historical values
+
+from bs4 import BeautifulSoup
+import requests
+from pprint import pprint
+import datetime
+import pandas as pd 
+import numpy as np
+
+#On cherche les données historiques
+start_date = datetime.date(2020, 1, 1)
+
+start = start_date.strftime("%Y-%m-%d")
+
+heure_actuelle = datetime.datetime.now().time()
+
+heure_cible = datetime.time(16, 5) #A 16h05, on va dire que les taux sont ceux du jour (car le site de l'ECBB se met à jour vers 16h), avant ce sont les taux de la veille
+
+if heure_actuelle < heure_cible:
+    end_date = datetime.date.today() - datetime.timedelta(2)
+else:
+    end_date = datetime.date.today() - datetime.timedelta(1)
+
+end = end_date.strftime("%Y-%m-%d")
+
+historical_page = requests.get("https://www.frankfurter.app/" + start + '..' + end + '?to=USD,GBP,BRL,SEK,THB').json()
+
+Rate = historical_page['rates'] #On fait ça pour ne prendre que les valeurs associées à la clé 'rates' de notre dictionnaire
+
+
+#we have a dictionnary but we want a list --> make it happen
+
+list_of_dates = list(Rate.keys())
+
+historical_values_list = []
+
+for date in list_of_dates:
+    list_of_name = list(Rate[date].keys())
+    for name in list_of_name:
+        rate_of_the_day = Rate[date][name]
+        historical_values_list.append((date, name, rate_of_the_day))
+        
+        
+        
+        
+        
+        
+ 2. TODAY VALUES
+ 
+ ecb_page = requests.get("https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html")
+
+ecb = BeautifulSoup(ecb_page.content, "html.parser")
+
+table = ecb.find('div', class_="forextable").find('tbody').find_all('tr')
+
+#ajd_date = datetime.date.today()
+
+if heure_actuelle < heure_cible:
+    ajd_date = datetime.date.today() - datetime.timedelta(1)
+else:
+    ajd_date = datetime.date.today()
+
+today = ajd_date.strftime("%Y-%m-%d")
+
+data = []
+
+for currency in table:
+            Date = today
+            Rate = (float(currency.find('span', class_="rate").text)) #On convertit notre rate en un nombre flottant (contre string avant)
+            Type = currency.find('td', class_="currency").text
+            data.append((Date, Type, Rate))
+
+list_today = []
+
+for money_wanted in data:
+    if (money_wanted[1]) == 'USD':
+         list_today.append(money_wanted)
+    elif (money_wanted[1]) == 'SEK':
+        list_today.append(money_wanted)
+    elif (money_wanted[1]) == 'BRL':
+        list_today.append(money_wanted)
+    elif (money_wanted[1]) == 'GBP':
+        list_today.append(money_wanted)
+    elif (money_wanted[1]) == 'THB':
+        list_today.append(money_wanted)
+    else:
+        ()
+
+
+
+
+
+3. GATHER EVERYTHING
+
+USD =[]
+GBP = []
+SEK =[]
+THB = []
+BRL =[]
+
+final_list = sorted(historical_values_list)+sorted(list_today)
+
+for t in final_list:            #On fait ça pour avoir les valeurs séparées pour chaque monnaie --> pratique pour la DB
+    if str(t[1]) == 'USD':
+            USD.append(t)
+    elif str(t[1]) == 'GBP':
+            GBP.append(t)
+    elif str(t[1]) == 'SEK':
+            SEK.append(t)
+    elif str(t[1]) == 'THB':
+            THB.append(t)
+    elif str(t[1]) == 'BRL':
+            BRL.append(t)
+
+USD_after = pd.DataFrame(sorted(USD), columns =['Date', 'Money', 'Rate'])#Une DataFrame par monnaie --> plus simple à manipuler
+GBP_after = pd.DataFrame(sorted(GBP), columns =['Date', 'Money', 'Rate'])
+SEK_after = pd.DataFrame(sorted(SEK), columns =['Date', 'Money', 'Rate'])
+THB_after = pd.DataFrame(sorted(THB), columns =['Date', 'Money', 'Rate'])
+BRL_after = pd.DataFrame(sorted(BRL), columns =['Date', 'Money', 'Rate'])
+
+
+4. FORECAST
+
+def naive_forecast(data_frame):  #On définit la fonction naïve forecast qu'on va pouvoir appliquer à chaque DataFrame
+    data_frame['Naive forecast'] = data_frame['Rate'].shift(1)
+    data_frame['Naive: error'] = data_frame['Rate'] - data_frame['Naive forecast']
+    data_frame ['Absolute error'] = data_frame['Naive: error'].abs()
+    data_frame ['MAE'] = data_frame['Absolute error'].sum()/len(data_frame['Absolute error']-1)
+    data_frame ['MAE'].loc[0] = np.nan
+
+    return data_frame
+
+USD_after = naive_forecast(USD_after) #On applique la fonction à nos DataFrame
+GBP_after = naive_forecast(GBP_after)
+SEK_after = naive_forecast(SEK_after)
+THB_after = naive_forecast(THB_after)
+BRL_after = naive_forecast(BRL_after)
+
+#Mnt on fait le forecast pour le lendemain
+heure_actuelle = datetime.datetime.now().time()
+
+heure_target = datetime.time(16, 5) #A 16h05, on va dire que les taux sont ceux du jour (car le site de l'ECBB se met à jour vers 16h), avant ce sont les taux de la veille
+
+if heure_actuelle < heure_target:
+    ajd = datetime.date.today()
+else:
+    ajd = datetime.date.today() + datetime.timedelta(1)
+
+USD = USD_after.append(pd.Series([ajd, 'USD', USD_after['Rate'].iloc[-1],USD_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+GBP = GBP_after.append(pd.Series([ajd, 'GBP', GBP_after['Rate'].iloc[-1],GBP_after['MAE'].iloc[-1]],index=['Date', 'Money','Naive forecast', 'MAE']),ignore_index=True)
+SEK = SEK_after.append(pd.Series([ajd, 'SEK', SEK_after['Rate'].iloc[-1],SEK_after['MAE'].iloc[-1]],index=['Date', 'Money','Naive forecast', 'MAE']),ignore_index=True)
+THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money','Naive forecast', 'MAE']),ignore_index=True)
+BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money','Naive forecast', 'MAE']),ignore_index=True)
+
+
+USD.to_sql('USD', connection, if_exists = 'replace')  #On ajoute nos dataframe (qu'on a crée avant) à notre base de données
+GBP.to_sql('GBP', connection, if_exists = 'replace')
+SEK.to_sql('SEK', connection, if_exists = 'replace')
+THB.to_sql('THB', connection, if_exists = 'replace')
+BRL.to_sql('BRL', connection, if_exists = 'replace')
+
+connection.commit() #sert à enregistrer le tout (la DB), à commit l'ensemble
+
+gathered = [USD, GBP, SEK, THB, BRL]
+
+for a in gathered:
+    pprint(a.iloc[-1])  #Pour avoir les forecast du lendemain pour chaque monnaie
