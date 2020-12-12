@@ -21,7 +21,7 @@ heure_actuelle = datetime.datetime.now().time()
 heure_cible = datetime.time(16, 5) #A 16h05, on va dire que les taux sont ceux du jour (car le site de l'ECBB se met à jour vers 16h), avant ce sont les taux de la veille
 
 if heure_actuelle < heure_cible:
-    end_date = datetime.date.today() - datetime.timedelta(2)
+    end_date = datetime.date.today() - datetime.timedelta(2) #it allows us to have room for the 2 latest data which will be retrieved on ECB
 else:
     end_date = datetime.date.today() - datetime.timedelta(1)
 
@@ -55,7 +55,7 @@ for date in list_of_dates:
 
 ecb = BeautifulSoup(ecb_page.content, "html.parser")
 
-table = ecb.find('div', class_="forextable").find('tbody').find_all('tr')
+table = ecb.find('div', class_="forextable").find('tbody').find_all('tr') 
 
 #ajd_date = datetime.date.today()
 
@@ -70,8 +70,8 @@ data = []
 
 for currency in table:
             Date = today
-            Rate = (float(currency.find('span', class_="rate").text)) #On convertit notre rate en un nombre flottant (contre string avant)
-            Type = currency.find('td', class_="currency").text
+            Rate = (float(currency.find(class_="rate").text)) #On convertit notre rate en un nombre flottant (contre string avant)
+            Type = currency.find(class_="currency").text
             data.append((Date, Type, Rate))
 
 list_today = []
@@ -130,7 +130,7 @@ def naive_forecast(data_frame):  #On définit la fonction naïve forecast qu'on 
     data_frame['Naive: error'] = data_frame['Rate'] - data_frame['Naive forecast']
     data_frame ['Absolute error'] = data_frame['Naive: error'].abs()
     data_frame ['MAE'] = data_frame['Absolute error'].sum()/len(data_frame['Absolute error']-1)
-    data_frame ['MAE'].loc[0] = np.nan
+    data_frame ['MAE'].loc[0] = np.nan 
 
     return data_frame
 
