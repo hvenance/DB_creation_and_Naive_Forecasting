@@ -168,5 +168,4 @@ connection.commit() #sert à enregistrer le tout (la DB), à commit l'ensemble
 gathered = [USD, GBP, SEK, THB, BRL]
 
 for a in gathered:
-    a.drop (columns= ["Rate", "Naive: error", "Absolute error"], inplace = True)
     pprint(a.iloc[-1])  #Pour avoir les forecast du lendemain pour chaque monnaie
