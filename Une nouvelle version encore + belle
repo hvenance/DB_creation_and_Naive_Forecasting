@@ -66,10 +66,23 @@ else:
 
 today = ajd_date.strftime("%Y-%m-%d")
 
+#we want to delete weekend days
+
+day = datetime.datetime.strptime(today, '%Y-%m-%d') 
+work = day.isoweekday()
+if work == 6:
+    d = day -  datetime.timedelta(1)
+    d= d.strftime("%Y-%m-%d")
+elif work ==7:
+    d =day - datetime.timedelta(2)
+    d= d.strftime("%Y-%m-%d")
+else: 
+    d= d.strftime("%Y-%m-%d")
+
 data = []
 
 for currency in table:
-            Date = today
+            Date = d
             Rate = (float(currency.find(class_="rate").text)) #On convertit notre rate en un nombre flottant (contre string avant)
             Type = currency.find(class_="currency").text
             data.append((Date, Type, Rate))
