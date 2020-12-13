@@ -214,13 +214,13 @@ if what_day[6]  < 4:
     THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
     BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
     
-    USD.to_sql('USD', connection, if_exists = 'replace')  #On ajoute nos dataframe (qu'on a crée avant) à notre base de données
-    GBP.to_sql('GBP', connection, if_exists = 'replace')
-    SEK.to_sql('SEK', connection, if_exists = 'replace')
-    THB.to_sql('THB', connection, if_exists = 'replace')
-    BRL.to_sql('BRL', connection, if_exists = 'replace')
+    #USD.to_sql('USD', connection, if_exists = 'replace')  #Je ne suis plus sur que ce soit utile mnt avec la fct save_db (cf plus bas) On ajoute nos dataframe (qu'on a crée avant) à notre base de données
+    #GBP.to_sql('GBP', connection, if_exists = 'replace')
+    #SEK.to_sql('SEK', connection, if_exists = 'replace')
+    #THB.to_sql('THB', connection, if_exists = 'replace')
+    #BRL.to_sql('BRL', connection, if_exists = 'replace')
     
-    connection.commit() #sert à enregistrer le tout (la DB), à commit l'ensemble
+    #connection.commit()
 
 elif what_day[6] == 4:
     if heure_actuelle < heure_target:
@@ -234,13 +234,13 @@ elif what_day[6] == 4:
     THB = THB.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
     BRL = BRL.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
     
-    USD.to_sql('USD', connection, if_exists = 'replace')  #On ajoute nos dataframe (qu'on a crée avant) à notre base de données
-    GBP.to_sql('GBP', connection, if_exists = 'replace')
-    SEK.to_sql('SEK', connection, if_exists = 'replace')
-    THB.to_sql('THB', connection, if_exists = 'replace')
-    BRL.to_sql('BRL', connection, if_exists = 'replace')
+    #USD.to_sql('USD', connection, if_exists = 'replace')  #Je ne suis plus sur que ce soit utile mnt avec la fct save_db (cf plus bas) On ajoute nos dataframe (qu'on a crée avant) à notre base de données
+    #GBP.to_sql('GBP', connection, if_exists = 'replace')
+    #SEK.to_sql('SEK', connection, if_exists = 'replace')
+    #THB.to_sql('THB', connection, if_exists = 'replace')
+    #BRL.to_sql('BRL', connection, if_exists = 'replace')
     
-    connection.commit()
+    #connection.commit()
     
 elif what_day[6] == 5:
     ajd = datetime.date.today() + datetime.timedelta(2)
@@ -251,11 +251,13 @@ elif what_day[6] == 5:
     THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
     BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
 
-    USD.to_sql('USD', connection, if_exists = 'replace')  #On ajoute nos dataframe (qu'on a crée avant) à notre base de données
-    GBP.to_sql('GBP', connection, if_exists = 'replace')
-    SEK.to_sql('SEK', connection, if_exists = 'replace')
-    THB.to_sql('THB', connection, if_exists = 'replace')
-    BRL.to_sql('BRL', connection, if_exists = 'replace')
+    #USD.to_sql('USD', connection, if_exists = 'replace')  #Je ne suis plus sur que ce soit utile mnt avec la fct save_db (cf plus bas) On ajoute nos dataframe (qu'on a crée avant) à notre base de données
+    #GBP.to_sql('GBP', connection, if_exists = 'replace')
+    #SEK.to_sql('SEK', connection, if_exists = 'replace')
+    #THB.to_sql('THB', connection, if_exists = 'replace')
+    #BRL.to_sql('BRL', connection, if_exists = 'replace')
+    
+    #connection.commit()
     
 elif what_day[6] == 6:
     ajd = datetime.date.today() + datetime.timedelta(1)
@@ -266,15 +268,24 @@ elif what_day[6] == 6:
     THB = THB.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
     BRL = BRL.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
 
+    #USD.to_sql('USD', connection, if_exists = 'replace')  #Je ne suis plus sur que ce soit utile mnt avec la fct save_db (cf plus bas) On ajoute nos dataframe (qu'on a crée avant) à notre base de données
+    #GBP.to_sql('GBP', connection, if_exists = 'replace')
+    #SEK.to_sql('SEK', connection, if_exists = 'replace')
+    #THB.to_sql('THB', connection, if_exists = 'replace')
+    #BRL.to_sql('BRL', connection, if_exists = 'replace')
+    
+    #connection.commit()
+    
+gathered = [USD, GBP, SEK, THB, BRL]
+
+def save_db():
     USD.to_sql('USD', connection, if_exists = 'replace')  #On ajoute nos dataframe (qu'on a crée avant) à notre base de données
     GBP.to_sql('GBP', connection, if_exists = 'replace')
     SEK.to_sql('SEK', connection, if_exists = 'replace')
     THB.to_sql('THB', connection, if_exists = 'replace')
     BRL.to_sql('BRL', connection, if_exists = 'replace')
-    
+        
     connection.commit()
-    
-gathered = [USD, GBP, SEK, THB, BRL]
 
 
 def print_forecast():
@@ -287,6 +298,7 @@ what_day.clear()
 
 #4
 
+schedule.every().day.at("22:00").do(save_db)
 schedule.every().day.at("16:06").do(print_forecast)
 
 while True:
