@@ -1,4 +1,5 @@
 #1
+!pip install schedule
 
 import sqlite3
 
@@ -275,8 +276,19 @@ elif what_day[6] == 6:
     
 gathered = [USD, GBP, SEK, THB, BRL]
 
-for a in gathered:
-    pprint(a.iloc[[-1], [0,1,3,6]])
+
+def print_forecast():
+    for a in gathered:
+        pprint(a.iloc[[-1], [0,1,3,6]])
     
     
 what_day.clear()
+
+
+#4
+
+schedule.every().day.at("16:06").do(print_forecast)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
