@@ -6,7 +6,7 @@ connection = sqlite3.connect('rates_gathering.db') #We create, name and create a
 #1. Historical values
 
 
-#Here, we will retrieve historical rates via an API call until the last working day before today. The rate of today will be retrieved via a webscrapping of the ECB webpage 
+#Here, we will retrieve historical rates via an API call until the last working day before today. The rates of today will be retrieved via a webscrapping of the ECB webpage 
 
 from bs4 import BeautifulSoup
 import requests
