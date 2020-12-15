@@ -25,14 +25,14 @@ start = start_date.strftime("%Y-%m-%d") #The start_date is converted in a string
 
 today = ajd_date.strftime("%Y-%m-%d") #The ajd_date is converted in a string
 
-work = ajd_date.isoweekday() #This aims to return an integer value  corresponding to the day of the week (where Monday = 1 and Sunday = 7)
+work = ajd_date.isoweekday() #This aims to return an integer value corresponding to the day of the week (where Monday = 1 and Sunday = 7)
 
 heure_actuelle = datetime.datetime.now().time() #We retrieve the precise time of the moment the code is run
 
-heure_cible = datetime.time(16, 5) #At 16h05, we say that the rate are the one of the day (since ECB website is update around 16h)
+heure_cible = datetime.time(16, 5) #At 16h05, we say that the rates are the one of the day (since ECB website is updated around 16h)
 
 
-if work == 1: #If we are monday
+if work == 1: #If we are Monday
     if heure_actuelle < heure_cible: #before 16h05, 
         end = ajd_date - datetime.timedelta(4) #We say that the end is the date of today minus 4 days (so the end is Thursday)
     else:
