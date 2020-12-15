@@ -8,14 +8,16 @@ connection = sqlite3.connect('rates_gathering.db') #We create, name and create a
 
 #Here, we will retrieve historical rates via an API call until the last working day before today. The rates of today will be retrieved via a webscrapping of the ECB webpage 
 
+#IF YOU ARE RUNNING IT FOR THE FIRST TIME AND THAT YOU DO NOT SCHEDULE, YOU NEED TO INSTALL IT 
+!pip install schedule #When you have done it once and that schedule is installed, you can remove this line
 from bs4 import BeautifulSoup
 import requests
-from 
-import pprint
+from pprint import pprint
 import datetime
 import pandas as pd 
 import numpy as np
 import schedule
+import time 
 
 start_date = datetime.date(2020, 1, 1)
 
@@ -273,11 +275,7 @@ def test():
         
  #6. Let's repeat it
 
-#IF YOU ARE RUNNING IT FOR THE FIRST TIME AND THAT YOU DO NOT SCHEDULE, YOU NEED TO INSTALL IT 
-!pip install schedule #When you have done it once and that schedule is installed, you can remove this line
 
-import time 
- 
 schedule.every().day.at("16:06").do(test)  #We schedule our function ('test') to be run every day at 16h06 
 
 while True:
