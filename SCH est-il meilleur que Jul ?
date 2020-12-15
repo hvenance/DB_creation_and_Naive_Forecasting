@@ -206,7 +206,7 @@ else:
 def test():
     what_day =[]
     for a in time.localtime():
-    #time.localtime() method is a time structure that returns the year, the month, etc. The 7 element ([6] in python) of this structure is the weekday (where 0 = Monday and 6 = Sunday) 
+    #time.localtime() method is a time structure that returns the year, the month, etc. The 7 elements ([6] in python) of this structure are the weekdays (where 0 = Monday and 6 = Sunday) 
         what_day.append(a)
 
     if what_day[6] < 4: #If we are between Monday and Wednesday included
