@@ -63,13 +63,13 @@ end = end.strftime("%Y-%m-%d") #The ajd (which is a date) is converted in a stri
 historical_page = requests.get("https://www.frankfurter.app/" + start + '..' + end + '?to=USD,GBP,BRL,SEK,THB').json()
 #We call the API from the start until the end (they are dates that have been converted in strings) and for specific money. This returns us a dictionnary with several
 #keys. One of these keys is 'rate' and it contains another dictionnary. In this dictionnary, there is another dictionnary where the key is the date and the values
-#are the rate of the day for the different money
+#are the rates of the day for the different moneys
 
-Rate = historical_page['rates'] #We do this to only get values associates to the key 'rate' of our dictionnary
+Rate = historical_page['rates'] #We do this to only get values associated to the key 'rates' of our dictionnary
 
 
 
-list_of_dates = list(Rate.keys()) #We do this to only get the keys (which are dates) of our 'rate' dictionnary
+list_of_dates = list(Rate.keys()) #We do this to only get the keys (which are dates) of our 'Rate' dictionnary
 
 historical_values_list = []
 
@@ -83,10 +83,10 @@ for date in list_of_dates:  #we have a dictionnary but we want a list --> make i
 
 
 
-#2. We want today's values
+#2. We want today's values (webscrapping part)
 
 
-if heure_actuelle < heure_cible: #Since the ECB website is updated at 16h, before 16h we have the rate from the last working day
+if heure_actuelle < heure_cible: #Since the ECB website is updated at 16h, before 16h we have the rates from the last working day
     ajd_date = datetime.date.today() - datetime.timedelta(1)
 else:
     ajd_date = datetime.date.today()
@@ -110,7 +110,7 @@ ecb_page = requests.get("https://www.ecb.europa.eu/stats/policy_and_exchange_rat
 ecb = BeautifulSoup(ecb_page.content, "html.parser")
 
 table = ecb.find('div', class_="forextable").find('tbody').find_all('tr') #after inspecting the ECB website, we ask the 'div' tag which has "forextable" as class.
-#In this div tag, we find tbody and in 'tbody' we find all 'tr' tag. The rate are in these 'tr' tags 
+#In this div tag, we find 'tbody' and in 'tbody' we find all 'tr' tag. The rates are in these 'tr' tags 
 
 data = []
 
@@ -140,7 +140,7 @@ for money_wanted in data:  #We filter our list_today with all moneys to keep onl
         
 #3. Let's gather everything
 
-#We will create a list per money with historical values and today's values
+#We will create a list per money with the historical values and today's value
 
 USD =[]
 GBP = []
@@ -172,7 +172,7 @@ BRL_after = pd.DataFrame(sorted(BRL), columns =['Date', 'Money', 'Rate'])
 
 #4. Time to forecast
 
-def naive_forecast(data_frame):  #We define the 'naïve forecas't function
+def naive_forecast(data_frame):  #We define the naive forecast function
     data_frame['Naive forecast'] = data_frame['Rate'].shift(1)
     data_frame['Naive: error'] = data_frame['Rate'] - data_frame['Naive forecast']
     data_frame['Absolute error'] = data_frame['Naive: error'].abs()
