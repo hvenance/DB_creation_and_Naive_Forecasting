@@ -102,7 +102,12 @@ if work == 6:
 elif work == 7:
     d = day - datetime.timedelta(2)
     d = d.strftime("%Y-%m-%d")
-else: 
+else:
+    if heure_actuelle < heure_cible: #Since the ECB website is updated at 16h, before 16h we have the rates from the last working day
+        day = datetime.date.today() - datetime.timedelta(1)
+    else:
+        day = datetime.date.today()
+    
     d = day.strftime("%Y-%m-%d")
 
 ecb_page = requests.get("https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html")
@@ -181,11 +186,11 @@ def naive_forecast(data_frame):  #We define the naive forecast function
 
     return data_frame
 
-USD = naive_forecast(USD_after) #we apply the function to our dataframes
-GBP = naive_forecast(GBP_after)
-SEK = naive_forecast(SEK_after)
-THB = naive_forecast(THB_after)
-BRL = naive_forecast(BRL_after)
+naive_forecast(USD_after) #we apply the function to our dataframes
+naive_forecast(GBP_after)
+naive_forecast(SEK_after)
+naive_forecast(THB_after)
+naive_forecast(BRL_after)
 
 
 #5. The database
