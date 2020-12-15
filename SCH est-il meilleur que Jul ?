@@ -257,9 +257,9 @@ def test():
         BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
         #Here, we add a line in our dataframe with the forecast for the next working day (which is Monday)
     
-    gathered = [USD, GBP, SEK, THB, BRL] #We gather all our dataframe in one big list
+    gathered = [USD, GBP, SEK, THB, BRL] #We gather all our dataframes in one big list
 
-    USD.to_sql('USD', connection, if_exists = 'replace')  #We add our DataFrame in our Database
+    USD.to_sql('USD', connection, if_exists = 'replace')  #We add our DataFrames in our Database
     GBP.to_sql('GBP', connection, if_exists = 'replace')
     SEK.to_sql('SEK', connection, if_exists = 'replace')
     THB.to_sql('THB', connection, if_exists = 'replace')
