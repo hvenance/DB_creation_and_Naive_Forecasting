@@ -40,7 +40,7 @@ if work == 1: #If we are Monday
 
 elif work == 2: #If we are Tuesday
     if heure_actuelle < heure_cible:
-        end = ajd_date - datetime.timedelta(4) #We say that the end is the date of today minus 3 days (so the end is Friday)
+        end = ajd_date - datetime.timedelta(4) #We say that the end is the date of today minus 4 days (so the end is Friday)
     else:
         end = ajd_date - datetime.timedelta(1) #We say that the end is the date of today minus 1 day (so the end is Monday)
         
