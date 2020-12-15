@@ -96,19 +96,19 @@ else:
 
 #we want to delete weekend days because the stock exchange is closed during the weekend
 
-day = datetime.datetime.strptime(today, '%Y-%m-%d') #NB. today is defined in the '1. Historical values' point
-work = day.isoweekday()
+
+#NB. ajd_date and work are defined in the '1. Historical values' point
 if work == 6:
-    d = day -  datetime.timedelta(1)
+    d = ajd_date -  datetime.timedelta(1)
     d = d.strftime("%Y-%m-%d")
 elif work == 7:
-    d = day - datetime.timedelta(2)
+    d = ajd_date - datetime.timedelta(2)
     d = d.strftime("%Y-%m-%d")
 else:
     if heure_actuelle < heure_cible: #Since the ECB website is updated at 16h, before 16h we have the rates from the last working day
-        day = datetime.date.today() - datetime.timedelta(1)
+        day = ajd_date - datetime.timedelta(1)
     else:
-        day = datetime.date.today()
+        day = ajd_date
     
     d = day.strftime("%Y-%m-%d")
 
@@ -186,7 +186,7 @@ def naive_forecast(data_frame):  #We define the naive forecast function
     data_frame['MAE'] = data_frame['Absolute error'].sum()/len(data_frame['Absolute error']-1)
     data_frame ['MAE'].iloc[0:-1] = np.nan
 
-    return data_frame
+    #return data_frame
 
 naive_forecast(USD_after) #we apply the function to our dataframes
 naive_forecast(GBP_after)
