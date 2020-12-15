@@ -88,7 +88,7 @@ for date in list_of_dates:  #we have a dictionnary but we want a list --> make i
 #2. We want today's values (webscrapping part)
 
 
-if heure_actuelle < heure_cible: #Since the ECB website is updated at 16h, before 16h we have the rates from the last working day
+if heure_actuelle < heure_cible: #Since the ECB website is updated around 16h (let's say that a 16h05 we are certain that website has been updated), before 16h05 we have the rates from the last working day
     ajd_date = datetime.date.today() - datetime.timedelta(1)
 else:
     ajd_date = datetime.date.today()
@@ -177,7 +177,7 @@ BRL_after = pd.DataFrame(sorted(BRL), columns =['Date', 'Money', 'Rate'])
 
 
 
-#4. Time to forecast
+#4. Let's define the forecast
 
 def naive_forecast(data_frame):  #We define the naive forecast function
     data_frame['Naive forecast'] = data_frame['Rate'].shift(1)
@@ -195,7 +195,7 @@ naive_forecast(THB_after)
 naive_forecast(BRL_after)
 
 
-#5. The database
+#5. Tomorrow forecast + stocking everything in the database
 
 
 if heure_actuelle < heure_cible: #NB. 'heure_actuelle' and 'heure_cible' have been defined in '1. Historical values'
