@@ -9,14 +9,14 @@ connection = sqlite3.connect('rates_gathering.db') #We create, name and create a
 #Here, we will retrieve historical rates via an API call until the last working day before today. The rates of today will be retrieved via a webscrapping of the ECB webpage 
 
 #IF YOU ARE RUNNING IT FOR THE FIRST TIME AND THAT YOU DO NOT SCHEDULE, YOU NEED TO INSTALL IT 
-!pip install schedule #When you have done it once and that schedule is installed, you can remove this line
+#!pip install schedule #When you have done it once and that schedule is installed, you can remove this line --> INUTILE SI ON N'UTILISE PAS SCHEDULE ET QU'ON DEMANDE DE RE RUN MANUELLEMENT
 from bs4 import BeautifulSoup
 import requests
 from pprint import pprint
 import datetime
 import pandas as pd 
 import numpy as np
-import schedule
+import schedule  --> INUTILE SI ON N'UTILISE PAS SCHEDULE ET QU'ON DEMANDE DE RE RUN MANUELLEMENT
 import time 
 
 start_date = datetime.date(2020, 1, 1)
@@ -203,81 +203,82 @@ if heure_actuelle < heure_cible: #NB. 'heure_actuelle' and 'heure_cible' have be
 else:
     ajd = datetime.date.today() + datetime.timedelta(1)
 
-def test():
-    what_day =[]
-    for a in time.localtime():
-    #time.localtime() method is a time structure that returns the year, the month, etc. The 7 elements ([6] in python) of this structure are the weekdays (where 0 = Monday and 6 = Sunday) 
-        what_day.append(a)
+#def test(): --> On ne fait plus ça finalement
+what_day =[]
+for a in time.localtime():
+#time.localtime() method is a time structure that returns the year, the month, etc. The 7 elements ([6] in python) of this structure are the weekdays (where 0 = Monday and 6 = Sunday) 
+    what_day.append(a)
 
-    if what_day[6] < 4: #If we are between Monday and Wednesday included
-        if heure_actuelle < heure_cible:
-            ajd = datetime.date.today()
+if what_day[6] < 4: #If we are between Monday and Wednesday included
+    if heure_actuelle < heure_cible:
+        ajd = datetime.date.today()
 
-        else:
-            ajd = datetime.date.today() + datetime.timedelta(1)
-
-        USD = USD_after.append(pd.Series([ajd, 'USD', USD_after['Rate'].iloc[-1],USD_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        GBP = GBP_after.append(pd.Series([ajd, 'GBP', GBP_after['Rate'].iloc[-1],GBP_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        SEK = SEK_after.append(pd.Series([ajd, 'SEK', SEK_after['Rate'].iloc[-1],SEK_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        #Here, we add a line in our dataframe with the forecast for the next working day
-
-
-    elif what_day[6] == 4: #If we are Friday
-        if heure_actuelle < heure_cible:
-            ajd = datetime.date.today()
-        else:
-            ajd = datetime.date.today() + datetime.timedelta(3)
-    
-        USD = USD_after.append(pd.Series([ajd, 'USD', USD_after['Rate'].iloc[-1],USD_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        GBP = GBP_after.append(pd.Series([ajd, 'GBP', GBP_after['Rate'].iloc[-1],GBP_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        SEK = SEK_after.append(pd.Series([ajd, 'SEK', SEK_after['Rate'].iloc[-1],SEK_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        #Here, we add a line in our dataframe with the forecast for the next working day (which is Monday if we are after 16h05)
-    
-    elif what_day[6] == 5: #If we are Saturday
-        ajd = datetime.date.today() + datetime.timedelta(2)
-
-        USD = USD_after.append(pd.Series([ajd, 'USD', USD_after['Rate'].iloc[-1],USD_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        GBP = GBP_after.append(pd.Series([ajd, 'GBP', GBP_after['Rate'].iloc[-1],GBP_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        SEK = SEK_after.append(pd.Series([ajd, 'SEK', SEK_after['Rate'].iloc[-1],SEK_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        #Here, we add a line in our dataframe with the forecast for the next working day (which is Monday)
-    
-    elif what_day[6] == 6: #If we are Sunday
+    else:
         ajd = datetime.date.today() + datetime.timedelta(1)
 
-        USD = USD_after.append(pd.Series([ajd, 'USD', USD_after['Rate'].iloc[-1],USD_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        GBP = GBP_after.append(pd.Series([ajd, 'GBP', GBP_after['Rate'].iloc[-1],GBP_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        SEK = SEK_after.append(pd.Series([ajd, 'SEK', SEK_after['Rate'].iloc[-1],SEK_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
-        #Here, we add a line in our dataframe with the forecast for the next working day (which is Monday)
-    
-    gathered = [USD, GBP, SEK, THB, BRL] #We gather all our dataframes in one big list
+    USD = USD_after.append(pd.Series([ajd, 'USD', USD_after['Rate'].iloc[-1],USD_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    GBP = GBP_after.append(pd.Series([ajd, 'GBP', GBP_after['Rate'].iloc[-1],GBP_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    SEK = SEK_after.append(pd.Series([ajd, 'SEK', SEK_after['Rate'].iloc[-1],SEK_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    #Here, we add a line in our dataframe with the forecast for the next working day
 
-    USD.to_sql('USD', connection, if_exists = 'replace')  #We add our DataFrames in our Database
-    GBP.to_sql('GBP', connection, if_exists = 'replace')
-    SEK.to_sql('SEK', connection, if_exists = 'replace')
-    THB.to_sql('THB', connection, if_exists = 'replace')
-    BRL.to_sql('BRL', connection, if_exists = 'replace')
+
+elif what_day[6] == 4: #If we are Friday
+    if heure_actuelle < heure_cible:
+        ajd = datetime.date.today()
+    else:
+        ajd = datetime.date.today() + datetime.timedelta(3)
+
+    USD = USD_after.append(pd.Series([ajd, 'USD', USD_after['Rate'].iloc[-1],USD_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    GBP = GBP_after.append(pd.Series([ajd, 'GBP', GBP_after['Rate'].iloc[-1],GBP_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    SEK = SEK_after.append(pd.Series([ajd, 'SEK', SEK_after['Rate'].iloc[-1],SEK_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    #Here, we add a line in our dataframe with the forecast for the next working day (which is Monday if we are after 16h05)
+
+elif what_day[6] == 5: #If we are Saturday
+    ajd = datetime.date.today() + datetime.timedelta(2)
+
+    USD = USD_after.append(pd.Series([ajd, 'USD', USD_after['Rate'].iloc[-1],USD_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    GBP = GBP_after.append(pd.Series([ajd, 'GBP', GBP_after['Rate'].iloc[-1],GBP_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    SEK = SEK_after.append(pd.Series([ajd, 'SEK', SEK_after['Rate'].iloc[-1],SEK_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    #Here, we add a line in our dataframe with the forecast for the next working day (which is Monday)
+
+elif what_day[6] == 6: #If we are Sunday
+    ajd = datetime.date.today() + datetime.timedelta(1)
+
+    USD = USD_after.append(pd.Series([ajd, 'USD', USD_after['Rate'].iloc[-1],USD_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    GBP = GBP_after.append(pd.Series([ajd, 'GBP', GBP_after['Rate'].iloc[-1],GBP_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    SEK = SEK_after.append(pd.Series([ajd, 'SEK', SEK_after['Rate'].iloc[-1],SEK_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    THB = THB_after.append(pd.Series([ajd, 'THB', THB_after['Rate'].iloc[-1],THB_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    BRL = BRL_after.append(pd.Series([ajd, 'BRL', BRL_after['Rate'].iloc[-1],BRL_after['MAE'].iloc[-1]],index=['Date', 'Money', 'Naive forecast', 'MAE']),ignore_index=True)
+    #Here, we add a line in our dataframe with the forecast for the next working day (which is Monday)
+
+gathered = [USD, GBP, SEK, THB, BRL] #We gather all our dataframes in one big list
+
+USD.to_sql('USD', connection, if_exists = 'replace')  #We add our DataFrames in our Database
+GBP.to_sql('GBP', connection, if_exists = 'replace')
+SEK.to_sql('SEK', connection, if_exists = 'replace')
+THB.to_sql('THB', connection, if_exists = 'replace')
+BRL.to_sql('BRL', connection, if_exists = 'replace')
+
+connection.commit()
+
+#what_day.clear() #We clear our list with the day (so when we rerun tomorrow the list will be empty) -->Pas utile si on dit qu'il faut re-run le kernel manuellement chaque jour
+
+print("Next working day forecast:")
+for a in gathered:
+    pprint(a.iloc[[-1], [0,1,3,6]]) #We print the next working day forecast
         
-    connection.commit()
-
-    what_day.clear() #We clear our list with the day (so when we repeat the action tomorrow the list will be empty)
-    print("Next working day forecast:")
-    for a in gathered:
-        pprint(a.iloc[[-1], [0,1,3,6]]) #We print the next day forecast in the DB
         
-        
- #6. Let's repeat it
+ #6. Let's repeat it --> Pas besoin de cette partie finalement
 
 
-schedule.every().day.at("16:06").do(test)  #We schedule our function ('test') to be run every day at 16h06 
+#schedule.every().day.at("16:06").do(test)  #We schedule our function ('test') to be run every day at 16h06 
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+#while True:
+    #schedule.run_pending()
+   # time.sleep(1)
