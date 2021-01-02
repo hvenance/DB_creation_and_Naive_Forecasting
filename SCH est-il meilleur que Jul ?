@@ -180,8 +180,8 @@ BRL_after = pd.DataFrame(sorted(BRL), columns =['Date', 'Money', 'Rate (1€ = )
 #4. Let's define the forecast
 
 def naive_forecast(data_frame):  #We define the naive forecast function
-    data_frame['Naive forecast'] = data_frame['Rate'].shift(1)
-    data_frame['Naive: error'] = data_frame['Rate'] - data_frame['Naive forecast']
+    data_frame['Naive forecast'] = data_frame['Rate (1€ = )'].shift(1)
+    data_frame['Naive: error'] = data_frame['Rate (1€ = )'] - data_frame['Naive forecast']
     data_frame['Absolute error'] = data_frame['Naive: error'].abs()
     data_frame['MAE'] = data_frame['Absolute error'].sum()/len(data_frame['Absolute error']-1)
     data_frame ['MAE'].iloc[0:-1] = np.nan
